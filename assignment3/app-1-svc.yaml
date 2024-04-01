@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: app-2-svc
+  name: app-1-svc
 spec:
   type: ClusterIP
   ports:
   - port: 8080
     targetPort: 8080
   selector:
-    app: app-2
+    app: app-1
