@@ -3,14 +3,30 @@ kind: ConfigMap
 metadata:
   name: nginx-configmap
 data:
-  default.conf: |
-    upstream backend {
-      server app-1-svc:8080;
-      server app-2-svc:8080;
+  nginx.conf: |
+    user nginx;
+    worker_processes auto;
+    error_log /var/log/nginx/error.log;
+    pid /run/nginx.pid;
+
+    events {
+        worker_connections 1024;
     }
-    server {
-      listen       8080;
-      location / {
-        proxy_pass http://backend;
-      }
+
+    http {
+        server {
+            listen 8080;
+
+            location / {
+                proxy_pass http://backend;
+            }
+
+            location /app-1 {
+                proxy_pass http://app-1-svc:3000;
+            }
+
+            location /app-2 {
+                proxy_pass http://app-2-svc:3000;
+            }
+        }
     }
